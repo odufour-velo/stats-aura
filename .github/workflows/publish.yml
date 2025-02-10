@@ -2,7 +2,7 @@ name: Publish reports
 on: [push]
 jobs:
   test:
-    name: Run MATLAB Test
+    name: Publish report
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -19,3 +19,8 @@ jobs:
         uses: matlab-actions/run-build@v2
         with:
           tasks: publish
+      - name: Archive reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: statistics-report
+          path: *.pdf
