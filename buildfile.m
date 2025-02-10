@@ -15,6 +15,14 @@ plan("test")    = matlab.buildtool.Task("Description","Unit tests", "Actions", @
 
 function local_publish(proj,isci)
 
+scripts = dir(fullfile(proj.RootFolder,"*.mlx"));
+for i = 1:numel(scripts)
+    scriptname = fullfile(scripts(i).folder,scripts(i).name);
+    reportname = regexprep(scriptname, "\.mlx$", ".pdf");
+    fprintf(1,"## Export '%s' into '%s'\n",scriptname, reportname);
+    export(scriptname,reportname,"Format", "pdf");
+end
+
 if isci
     quit(0)
 end
