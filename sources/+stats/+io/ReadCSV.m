@@ -2,11 +2,12 @@ classdef ReadCSV < matlab.mixin.SetGet
 
     %% CONSTANT PROPERTIES
     properties (Constant)
-        REQUIRED_COLUMNS = ["Age"; "Sexe"; "Dept_Cod"; "Club_Nom"; "Saison"; "Region_Code"; "Categorie"; "Discipline"];
+        REQUIRED_COLUMNS = ["UCI_ID"; "Age"; "Sexe"; "Dept_Cod"; "Club_Nom"; "Saison"; "Region_Code"; "Categorie"; "Discipline"];
     end
 
     %% DEPENDENT PROPERTIES
     properties (Dependent)
+        Date
         Data
     end
 
@@ -35,8 +36,21 @@ classdef ReadCSV < matlab.mixin.SetGet
     %% ACCESSORS
     methods
 
+        function date = get.Date(obj)
+            [~,filename] = fileparts(obj.filename_);
+            datefromname = regexp(filename, "^\d{8}", "match");
+            if ~isempty(datefromname)
+                date = datetime(datefromname, "InputFormat", "yyyyMMdd");
+            else
+                attr = dir(obj.filename_);
+                date = datetime(attr.datenum,"ConvertFrom","datenum");
+            end
+            date.Format = "dd-MMM-yyyy";
+        end
+
         function data = get.Data(obj)
-            data = obj.data_;
+            data        = obj.data_;
+            data.Date   = repmat(obj.Date, height(data),1);
         end
 
     end
@@ -55,6 +69,7 @@ classdef ReadCSV < matlab.mixin.SetGet
             % Remove extra characters
             d{:,:} = regexprep(d{:,:}, "[=""]", "");
 
+            d.UCI_ID        = string(d.UCI_ID);
             d.Age           = str2double(d.Age);
             d.Sexe          = categorical(d.Sexe);
             d.Dept_Cod      = str2double(d.Dept_Cod);
@@ -63,7 +78,7 @@ classdef ReadCSV < matlab.mixin.SetGet
             d.Categorie     = categorical(d.Categorie);
             d.Discipline    = categorical(d.Discipline);
             d.Club_Nom      = string(d.Club_Nom);
-
+            
             obj.data_ = d;
 
         end

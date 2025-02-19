@@ -25,14 +25,14 @@ classdef ReadCSVTest < matlab.mock.TestCase
 
             % [ SETUP ]
             proj = currentProject();
-            filename = fullfile(proj.RootFolder,"data","20250218_licences.csv");
+            filename = fullfile(proj.RootFolder,"data","20250219_licences.csv");
             sut = stats.io.ReadCSV(filename);
 
             % [ EXERCISE ]
             read(sut)
 
             % [ VERIFY ]
-            testCase.verifySize(sut.Data, [15870,13])
+            testCase.verifySize(sut.Data, [15870,14])
 
         end
 
