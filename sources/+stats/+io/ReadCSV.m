@@ -58,8 +58,22 @@ classdef ReadCSV < matlab.mixin.SetGet
     %% PUBLIC METHODS
     methods
 
-        function read(obj)
+        function sortedobjs = sort(obj)
+            [~,idx] = sort([obj.Date]);
+            sortedobjs = obj(idx);
+        end
 
+        function read(obj)
+            arrayfun(@readImpl,obj)
+        end
+
+    end
+
+    %% PROTECTED METHODS
+    methods (Access = protected)
+
+        function readImpl(obj)
+            
             % Read CSV as a table and check that all required variables are present
             d = readtable(obj.filename_);
             assert(all(ismember(obj.REQUIRED_COLUMNS, d.Properties.VariableNames)), ...
@@ -81,6 +95,16 @@ classdef ReadCSV < matlab.mixin.SetGet
             
             obj.data_ = d;
 
+        end
+
+    end
+
+    %% STATIC METHODS
+    methods (Static)
+
+        function obj = fromFolder(folder)
+            filenames = dir(fullfile(folder,"*.csv"));
+            obj = arrayfun(@(x) stats.io.ReadCSV(fullfile(x.folder,x.name)), filenames);
         end
 
     end

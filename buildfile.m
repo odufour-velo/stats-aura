@@ -45,7 +45,7 @@ for i = 1:numel(scripts)
     scriptname = fullfile(scripts(i).folder,scripts(i).name);
     reportname = regexprep(scriptname, "\.mlx$", ".pdf");
     fprintf(1,"## Export '%s' into '%s'\n",scriptname, reportname);
-    export(scriptname,reportname,"Format", "pdf");
+    export(scriptname,reportname,"Format", "pdf", "Run", true, "HideCode", true, "FigureFormat", "jpeg");
 end
 
 if isci
