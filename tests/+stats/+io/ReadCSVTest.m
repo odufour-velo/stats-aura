@@ -32,7 +32,7 @@ classdef ReadCSVTest < matlab.mock.TestCase
             read(sut)
 
             % [ VERIFY ]
-            testCase.verifySize(sut.Data, [15870,14])
+            testCase.verifySize(sut.Data, [15916,15])
 
         end
 
