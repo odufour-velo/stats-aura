@@ -57,12 +57,6 @@ function local_test(proj,isci)
 % Create test suite and generate JUnit report in CI context
 %
 
-if isci
-    slddCacheFileName = regexprep(proj.Name,"[^a-zA-Z\s]+","_") + "_local.slddc";
-    slddCacheFile = fullfile(proj.SimulinkCacheFolder,slddCacheFileName);
-    Simulink.dd.setCachePath(slddCacheFile);
-end
-
 runner = matlab.unittest.TestRunner.withTextOutput();
 
 % Enable the JUnit XML report for GitLab CI
